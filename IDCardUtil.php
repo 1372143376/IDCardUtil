@@ -163,15 +163,15 @@ class IDCardUtil
 			return false;
 		}
 		//校验生日
-		
+
 		if (!$this->validDate($id))
 		{
 			return false;
 		}
 		//校验位数,即最后一位是否匹配
-		if ($this->validParityBit($id) == substr($id,-1))
+		if ($this->validParityBit($id) == substr($id, -1))
 		{
-			return  $id.'有效..';
+			return $id . '有效..';
 		}
 		return false;
 	}
@@ -189,12 +189,14 @@ class IDCardUtil
 	//校验生日
 	private function validDate($id)
 	{
-		$birth = strlen($id) == 15 ? '19' . substr($id, 6, 12) : substr($id, 6, 14);
-		//缺少生日日期  合法验证逻辑///
-		if ($birth)
+		$birth = strlen($id) == 15 ? '19' . substr($id, 6, 8) : substr($id, 6, 8);
+		//缺少生日日期
+		//php有内置函数checkdate — 验证一个格里高里日期 >php5.6
+		if (checkdate(substr($birth, 4, 2), substr($birth, 6, 2), substr($birth, 0, 4)))
 		{
 			return true;
 		}
+		return false;
 	}
 
 	//校验位数
@@ -221,7 +223,7 @@ class IDCardUtil
 				$power += ($id_array[$i] - 0) * self::$POWER[$i];
 			}
 		}
-		return self::$PARITYBIT[ $power % 11];
+		return self::$PARITYBIT[$power % 11];
 	}
 }
 
